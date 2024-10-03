@@ -14,6 +14,12 @@ public class loginResponse {
 
     public loginResponse() {
     }
+
+    public loginResponse(Long id, String token) {
+        this.id = id;
+        this.token = token;
+    }
+    
     
     
 
