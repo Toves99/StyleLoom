@@ -20,7 +20,7 @@ import service.UserService;
 public class UserServiceImpl implements UserService {
 
     private static final String INSERT_USER = "INSERT INTO users (username,email,bio,socialLinks,isInfluencer, password, token) VALUES (?, ?, ?,?,?,?,?)";
-    private static final String SELECT_USER = "SELECT * FROM users WHERE username = ? AND password = ?";
+    private static final String SELECT_USER = "SELECT * FROM users WHERE email = ? AND password = ?";
     private static final String SELECT_TOKEN = "SELECT * FROM users WHERE token = ?";
     private static final String UPDATE_USER = "UPDATE users SET username = ?, email = ?, bio = ?, socialLinks = ?, isInfluencer = ?, password = ?, token = ? WHERE id = ?";
     private static final String DELETE_USER = "DELETE FROM users WHERE id = ?";
@@ -77,8 +77,11 @@ public class UserServiceImpl implements UserService {
     public boolean validateToken(String token) {
         try (Connection conn = DatabaseConnect.getConnection(); PreparedStatement stmt = conn.prepareStatement(SELECT_TOKEN)) {
             stmt.setString(1, token);
+            System.out.println("Token being validated: " + token); // Debug statement
             try (ResultSet rs = stmt.executeQuery()) {
-                return rs.next();
+                boolean isValid = rs.next();
+                System.out.println("Token validation query result: " + isValid); // Additional debug statement
+                return isValid;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -141,7 +144,8 @@ public class UserServiceImpl implements UserService {
         }
         return false;
     }
-    
+
+    @Override
     public void delete(long userId) throws SQLException {
         try (Connection conn = DatabaseConnect.getConnection(); PreparedStatement stmt = conn.prepareStatement(DELETE_USER)) {
             stmt.setLong(1, userId); // Bind the user ID to specify which user to delete
@@ -152,5 +156,32 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-}
+    }
+    
+    @Override
+    public User getUserById(Long id) throws SQLException {
+        User user = null;
+        // Replace this with your actual database connection and query logic
+        String query = "SELECT * FROM users WHERE id = ?"; // Adjust table name and fields as necessary
+        try (Connection conn = DatabaseConnect.getConnection(); // Make sure you have a method to get a connection
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setLong(1, id);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    // Assuming you have a constructor that matches your database fields
+                    user = new User(
+                        rs.getLong("id"),
+                        rs.getString("username"),
+                        rs.getString("email"),
+                        rs.getString("bio"),
+                        rs.getString("password"), // if you want to retrieve it
+                        rs.getString("socialLinks"),
+                        rs.getBoolean("isInfluencer"),
+                        rs.getString("token") // if you want to retrieve it
+                    );
+                }
+            }
+        }
+        return user; // This will return null if the user is not found
+    }
 }

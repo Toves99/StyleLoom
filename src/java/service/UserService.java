@@ -18,5 +18,7 @@ public interface UserService {
     boolean validateToken(String token);
     void update(User user) throws SQLException;
     User getUserByEmail(String email) throws SQLException;
+    void delete(long userId) throws SQLException;
+    User getUserById(Long id) throws SQLException;
     
 }

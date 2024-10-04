@@ -21,8 +21,7 @@ public class User {
     public User() {
     }
 
-    public User(Long id, String username, String email, String bio, String password, String socialLinks, boolean isInfluencer,String token) {
-        this.id = id;
+    public User(String username, String email, String bio, String password, String socialLinks, boolean isInfluencer,String token) {
         this.username = username;
         this.email = email;
         this.bio = bio;
@@ -30,6 +29,17 @@ public class User {
         this.socialLinks = socialLinks;
         this.isInfluencer = isInfluencer;
         this.token = token;
+    }
+    
+    public User(Long id,String username, String email, String bio, String password, String socialLinks, boolean isInfluencer,String token) {
+        this.username = username;
+        this.email = email;
+        this.bio = bio;
+        this.password = password;
+        this.socialLinks = socialLinks;
+        this.isInfluencer = isInfluencer;
+        this.token = token;
+        this.id=id;
     }
 
     public Long getId() {
