@@ -16,12 +16,13 @@ public class User {
     private String password;
     private String socialLinks;
     private boolean isInfluencer;
+    private String mobileNo;
     private String token;
 
     public User() {
     }
 
-    public User(String username, String email, String bio, String password, String socialLinks, boolean isInfluencer,String token) {
+    public User(String username, String email, String bio, String password, String socialLinks, boolean isInfluencer,String token,String mobileNo) {
         this.username = username;
         this.email = email;
         this.bio = bio;
@@ -29,9 +30,10 @@ public class User {
         this.socialLinks = socialLinks;
         this.isInfluencer = isInfluencer;
         this.token = token;
+        this.mobileNo=mobileNo;
     }
     
-    public User(Long id,String username, String email, String bio, String password, String socialLinks, boolean isInfluencer,String token) {
+    public User(Long id,String username, String email, String bio, String password, String socialLinks, boolean isInfluencer,String token,String mobileNo) {
         this.username = username;
         this.email = email;
         this.bio = bio;
@@ -40,6 +42,7 @@ public class User {
         this.isInfluencer = isInfluencer;
         this.token = token;
         this.id=id;
+        this.mobileNo=mobileNo;
     }
 
     public Long getId() {
@@ -104,6 +107,14 @@ public class User {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getMobileNo() {
+        return mobileNo;
+    }
+
+    public void setMobileNo(String mobileNo) {
+        this.mobileNo = mobileNo;
     }
     
 

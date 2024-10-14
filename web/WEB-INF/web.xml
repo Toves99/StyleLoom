@@ -52,6 +52,16 @@
         <url-pattern>/api/updateUser</url-pattern>
     </servlet-mapping>
     
+    <!-- Update User Servlet -->
+    <servlet>
+        <servlet-name>GetUserByIdServlet</servlet-name>
+        <servlet-class>servlet.GetUserByIdServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetUserByIdServlet</servlet-name>
+        <url-pattern>/api/getUserById</url-pattern>
+    </servlet-mapping>
+    
 <!--    <servlet>
       <servlet-name>PhotoServlet</servlet-name>
       <servlet-class>servlet.PhotoServlet</servlet-class>

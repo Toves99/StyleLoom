@@ -45,6 +45,7 @@ public class UpdateAccountServlet extends HttpServlet{
             String bio = json.getString("bio");
             String socialLinks = json.getString("socialLinks");
             boolean isInfluencer = json.getBoolean("isInfluencer");
+            String mobileNo=json.getString("mobileNo");
 
             // Fetch the existing user to retain the password and token
             User existingUser = userService.getUserById(userId);
@@ -60,6 +61,7 @@ public class UpdateAccountServlet extends HttpServlet{
             existingUser.setBio(bio);
             existingUser.setSocialLinks(socialLinks);
             existingUser.setIsInfluencer(isInfluencer);
+            existingUser.setMobileNo(mobileNo);
 
             // Call the update method with the modified user object
             userService.update(existingUser);

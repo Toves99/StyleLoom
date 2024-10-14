@@ -5,6 +5,7 @@
 package service;
 
 import java.sql.SQLException;
+import model.ProfilePhoto;
 import model.User;
 import model.loginResponse;
 
@@ -20,5 +21,7 @@ public interface UserService {
     User getUserByEmail(String email) throws SQLException;
     void delete(long userId) throws SQLException;
     User getUserById(Long id) throws SQLException;
+    void uploadPhoto(ProfilePhoto profilePhoto) throws SQLException;
+    public ProfilePhoto getProfileImage(int userId);
     
 }

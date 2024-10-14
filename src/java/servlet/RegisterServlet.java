@@ -45,11 +45,12 @@ public class RegisterServlet extends HttpServlet{
             String bio=json.getString("bio");
             String socialLinks=json.getString("socialLinks");
             boolean isInfluencer=json.getBoolean("isInfluencer");
+            String mobileNo=json.getString("mobileNo");
             
             
             try {
                 String token = TokenUtil.generateToken();
-                User user = new User(username, email, bio, password,socialLinks,isInfluencer, token);
+                User user = new User(username, email, bio, password,socialLinks,isInfluencer, token,mobileNo);
                 useService.register(user);
                 
                 resp.setContentType("application/json");

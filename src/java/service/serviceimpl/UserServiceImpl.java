@@ -19,10 +19,10 @@ import service.UserService;
  */
 public class UserServiceImpl implements UserService {
 
-    private static final String INSERT_USER = "INSERT INTO users (username,email,bio,socialLinks,isInfluencer, password, token) VALUES (?, ?, ?,?,?,?,?)";
+    private static final String INSERT_USER = "INSERT INTO users (username,email,bio,socialLinks,isInfluencer, password, token,mobileNo) VALUES (?, ?, ?,?,?,?,?,?)";
     private static final String SELECT_USER = "SELECT * FROM users WHERE email = ? AND password = ?";
     private static final String SELECT_TOKEN = "SELECT * FROM users WHERE token = ?";
-    private static final String UPDATE_USER = "UPDATE users SET username = ?, email = ?, bio = ?, socialLinks = ?, isInfluencer = ?, password = ?, token = ? WHERE id = ?";
+    private static final String UPDATE_USER = "UPDATE users SET username = ?, email = ?, bio = ?, socialLinks = ?, isInfluencer = ?, password = ?, token = ?,mobileNo=? WHERE id = ?";
     private static final String DELETE_USER = "DELETE FROM users WHERE id = ?";
 
     @Override
@@ -37,7 +37,8 @@ public class UserServiceImpl implements UserService {
             stmt.setString(4, user.getSocialLinks());
             stmt.setBoolean(5, false);
             stmt.setString(6, user.getPassword());
-            stmt.setString(7, user.getToken());  // Setting isInfluencer to false
+            stmt.setString(7, user.getToken());
+            stmt.setString(8,user.getMobileNo());// Setting isInfluencer to false
 
             int affectedRows = stmt.executeUpdate();
 
@@ -65,7 +66,13 @@ public class UserServiceImpl implements UserService {
                 if (rs.next()) {
                     return new loginResponse(
                             rs.getLong("id"),
-                            rs.getString("token")
+                            rs.getString("token"),
+                             rs.getString("username"),
+                            rs.getString("email"),
+                            rs.getString("bio"),
+                            rs.getString("socialLinks"),
+                            rs.getBoolean("isInfluencer"),
+                            rs.getString("mobileNo")
                     );
                 }
             }
@@ -99,7 +106,8 @@ public class UserServiceImpl implements UserService {
             stmt.setBoolean(5, user.isIsInfluencer());
             stmt.setString(6, user.getPassword());
             stmt.setString(7, user.getToken());
-            stmt.setLong(8, user.getId()); // Bind the user ID to identify which user to update
+            stmt.setString(8,user.getMobileNo());
+            stmt.setLong(9, user.getId()); // Bind the user ID to identify which user to update
 
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
@@ -123,7 +131,8 @@ public class UserServiceImpl implements UserService {
                             rs.getString("password"), // Fetch password
                             rs.getString("socialLinks"), // Fetch socialLinks
                             rs.getBoolean("isInfluencer"), // Fetch boolean for isInfluencer
-                            rs.getString("token")
+                            rs.getString("token"),
+                            rs.getString("mobileNo")
                     // Ensure 'id' is an integer in the User model
                     );
                 }
@@ -177,7 +186,8 @@ public class UserServiceImpl implements UserService {
                         rs.getString("password"), // if you want to retrieve it
                         rs.getString("socialLinks"),
                         rs.getBoolean("isInfluencer"),
-                        rs.getString("token") // if you want to retrieve it
+                        rs.getString("token"),
+                             rs.getString("mobileNo")// if you want to retrieve it
                     );
                 }
             }

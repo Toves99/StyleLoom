@@ -62,6 +62,11 @@ public class LoginServlet extends HttpServlet{
                 resp.setStatus(HttpServletResponse.SC_OK);
                 JSONObject responseJson = new JSONObject();
                 try {
+                    responseJson.put("mobileNo", loginResponse.getMobileNo());
+                    responseJson.put("socialLinks", loginResponse.getSocialLinks());
+                    responseJson.put("bio", loginResponse.getBio());
+                    responseJson.put("email", loginResponse.getEmail());
+                    responseJson.put("username", loginResponse.getUsername());
                     responseJson.put("token", loginResponse.getToken());
                     responseJson.put("id", loginResponse.getId());
                 } catch (JSONException ex) {
