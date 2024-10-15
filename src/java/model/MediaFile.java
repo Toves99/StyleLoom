@@ -8,18 +8,20 @@ package model;
  *
  * @author cekesa
  */
-public class ProfilePhoto {
+public class MediaFile {
     private Long id;
     private Long userId;
-    private String photoBase64;
+    private String mediaBase64;
+    private int type;
 
-    public ProfilePhoto() {
+    public MediaFile() {
     }
 
-    public ProfilePhoto(Long id, Long userId, String photoBase64) {
+    public MediaFile(Long id, Long userId, String mediaBase64, int type) {
         this.id = id;
         this.userId = userId;
-        this.photoBase64 = photoBase64;
+        this.mediaBase64 = mediaBase64;
+        this.type = type;
     }
 
     public Long getId() {
@@ -38,17 +40,26 @@ public class ProfilePhoto {
         this.userId = userId;
     }
 
-    public String getPhotoBase64() {
-        return photoBase64;
+    public String getMediaBase64() {
+        return mediaBase64;
     }
 
-    public void setPhotoBase64(String photoBase64) {
-        this.photoBase64 = photoBase64;
+    public void setMediaBase64(String photoBase64) {
+        this.mediaBase64 = photoBase64;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     @Override
     public String toString() {
-        return "ProfilePhoto{" + "id=" + id + ", userId=" + userId + ", photoBase64=" + photoBase64 + '}';
+        return "MediaFile{" + "id=" + id + ", userId=" + userId + ", photoBase64=" + mediaBase64 + ", type=" + type + '}';
     }
+    
     
 }

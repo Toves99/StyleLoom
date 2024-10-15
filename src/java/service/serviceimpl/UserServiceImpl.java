@@ -5,13 +5,22 @@
 package service.serviceimpl;
 
 import Utils.DatabaseConnect;
+import Utils.Queries;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Base64;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.ProfilePhoto;
 import model.User;
 import model.loginResponse;
 import service.UserService;
+
+
 
 /**
  *
@@ -19,18 +28,12 @@ import service.UserService;
  */
 public class UserServiceImpl implements UserService {
 
-    private static final String INSERT_USER = "INSERT INTO users (username,email,bio,socialLinks,isInfluencer, password, token,mobileNo) VALUES (?, ?, ?,?,?,?,?,?)";
-    private static final String SELECT_USER = "SELECT * FROM users WHERE email = ? AND password = ?";
-    private static final String SELECT_TOKEN = "SELECT * FROM users WHERE token = ?";
-    private static final String UPDATE_USER = "UPDATE users SET username = ?, email = ?, bio = ?, socialLinks = ?, isInfluencer = ?, password = ?, token = ?,mobileNo=? WHERE id = ?";
-    private static final String DELETE_USER = "DELETE FROM users WHERE id = ?";
-
     @Override
     public void register(User user) throws SQLException {
         if (isEmailTaken(user.getEmail())) {
             throw new SQLException("User with the given email already exists.");
         }
-        try (Connection conn = DatabaseConnect.getConnection(); PreparedStatement stmt = conn.prepareStatement(INSERT_USER, PreparedStatement.RETURN_GENERATED_KEYS)) {
+        try (Connection conn = DatabaseConnect.getConnection(); PreparedStatement stmt = conn.prepareStatement(Queries.INSERT_USER, PreparedStatement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getBio());
@@ -59,7 +62,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public loginResponse login(String email, String password) throws SQLException {
-        try (Connection conn = DatabaseConnect.getConnection(); PreparedStatement stmt = conn.prepareStatement(SELECT_USER)) {
+        try (Connection conn = DatabaseConnect.getConnection(); PreparedStatement stmt = conn.prepareStatement(Queries.SELECT_USER)) {
             stmt.setString(1, email);
             stmt.setString(2, password);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -82,7 +85,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean validateToken(String token) {
-        try (Connection conn = DatabaseConnect.getConnection(); PreparedStatement stmt = conn.prepareStatement(SELECT_TOKEN)) {
+        try (Connection conn = DatabaseConnect.getConnection(); PreparedStatement stmt = conn.prepareStatement(Queries.SELECT_TOKEN)) {
             stmt.setString(1, token);
             System.out.println("Token being validated: " + token); // Debug statement
             try (ResultSet rs = stmt.executeQuery()) {
@@ -98,7 +101,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(User user) throws SQLException {
-        try (Connection conn = DatabaseConnect.getConnection(); PreparedStatement stmt = conn.prepareStatement(UPDATE_USER)) {
+        try (Connection conn = DatabaseConnect.getConnection(); PreparedStatement stmt = conn.prepareStatement(Queries.UPDATE_USER)) {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getBio());
@@ -118,8 +121,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByEmail(String email) throws SQLException {
-        String SELECT_USER_BY_EMAIL = "SELECT * FROM users WHERE email = ?";
-        try (Connection conn = DatabaseConnect.getConnection(); PreparedStatement stmt = conn.prepareStatement(SELECT_USER_BY_EMAIL)) {
+        try (Connection conn = DatabaseConnect.getConnection(); PreparedStatement stmt = conn.prepareStatement(Queries.SELECT_USER_BY_EMAIL)) {
             stmt.setString(1, email);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -142,8 +144,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public boolean isEmailTaken(String email) throws SQLException {
-        String CHECK_EMAIL_EXISTS = "SELECT COUNT(*) FROM users WHERE email = ?";
-        try (Connection conn = DatabaseConnect.getConnection(); PreparedStatement stmt = conn.prepareStatement(CHECK_EMAIL_EXISTS)) {
+        try (Connection conn = DatabaseConnect.getConnection(); PreparedStatement stmt = conn.prepareStatement(Queries.CHECK_EMAIL_EXISTS)) {
             stmt.setString(1, email);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -156,7 +157,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(long userId) throws SQLException {
-        try (Connection conn = DatabaseConnect.getConnection(); PreparedStatement stmt = conn.prepareStatement(DELETE_USER)) {
+        try (Connection conn = DatabaseConnect.getConnection(); PreparedStatement stmt = conn.prepareStatement(Queries.DELETE_USER)) {
             stmt.setLong(1, userId); // Bind the user ID to specify which user to delete
 
             int affectedRows = stmt.executeUpdate();
@@ -193,5 +194,54 @@ public class UserServiceImpl implements UserService {
             }
         }
         return user; // This will return null if the user is not found
+    }
+
+    @Override
+    public void uploadPhoto(ProfilePhoto profilePhoto) throws SQLException {
+        try(Connection conn=DatabaseConnect.getConnection();
+            PreparedStatement stmt=conn.prepareStatement(Queries.INSERT_PHOTO,PreparedStatement.RETURN_GENERATED_KEYS)){
+            stmt.setLong(1, profilePhoto.getUserId());
+             byte[] photoData = Base64.getDecoder().decode(profilePhoto.getPhotoBase64());
+             InputStream inputStream = new ByteArrayInputStream(photoData);
+            stmt.setBinaryStream(2, inputStream, photoData.length);
+            int affectedRows = stmt.executeUpdate();
+            if(affectedRows>0){
+                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        profilePhoto.setId(generatedKeys.getLong(1)); // Set the generated ID to the photo object
+                    } else {
+                        throw new SQLException("Uploading profile failed, no ID obtained.");
+                    }
+                }
+            }else {
+                throw new SQLException("Uploading profile failed, no rows affected.");
+            }
+        }
+    }
+
+    @Override
+    public ProfilePhoto getProfileImage(int userId) {
+               ProfilePhoto profilePhoto = null;
+    try (Connection conn = DatabaseConnect.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(Queries.SELECT_PHOTO_BY_USERID)) {
+        stmt.setInt(1, userId);
+        
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                // Convert binary data to base64
+                byte[] photoData = rs.getBytes("photoData");
+                String photoBase64 = Base64.getEncoder().encodeToString(photoData);
+
+                profilePhoto = new ProfilePhoto(
+                    rs.getLong("id"),
+                    rs.getLong("userId"),
+                    photoBase64
+                );
+            }
+        }
+    }   catch (SQLException ex) {
+            Logger.getLogger(UserServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    return profilePhoto; // Return the found ProfileImage or null if not found
     }
 }

@@ -6,10 +6,7 @@
             <file>file:/Users/cekesa/NetBeansProjects/StyleLoom/src/java/model/User.java</file>
             <file>file:/Users/cekesa/NetBeansProjects/StyleLoom/src/java/service/serviceimpl/UserServiceImpl.java</file>
             <file>file:/Users/cekesa/NetBeansProjects/StyleLoom/src/java/Utils/DatabaseConnect.java</file>
-            <file>file:/Users/cekesa/NetBeansProjects/StyleLoom/src/java/model/loginResponse.java</file>
-            <file>file:/Users/cekesa/NetBeansProjects/StyleLoom/src/java/Utils/TokenUtil.java</file>
             <file>file:/Users/cekesa/NetBeansProjects/StyleLoom/src/java/servlet/AuthFilter.java</file>
-            <file>file:/Users/cekesa/NetBeansProjects/StyleLoom/src/java/servlet/RegisterServlet.java</file>
         </group>
     </open-files>
 </project-private>
