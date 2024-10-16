@@ -9,6 +9,7 @@ package Utils;
  * @author cekesa
  */
 public class Queries {
+
     public static final String INSERT_USER = "INSERT INTO users (username,email,bio,socialLinks,isInfluencer, password, token,mobileNo) VALUES (?, ?, ?,?,?,?,?,?)";
     public static final String SELECT_USER = "SELECT * FROM users WHERE email = ? AND password = ?";
     public static final String SELECT_TOKEN = "SELECT * FROM users WHERE token = ?";
@@ -32,6 +33,11 @@ public class Queries {
     public static final String DELETE_PRODUCT_BY_ID = "DELETE FROM product WHERE id = ?";
     public static final String SELECT_ALL_PRODUCT = "SELECT * FROM products";
     public static final String UPDATE_PRODUCT = "UPDATE product SET name = ?, price = ?, description = ?";
-    
-    
+    public static final String INSERT_ORDER = "INSERT INTO orders (userId, totalAmount) VALUES (?, ?)";
+    public static final String INSERT_ORDER_PRODUCT = "INSERT INTO order_products (orderId, productId) VALUES (?, ?)";
+    public static final String FETCH_ALL_ORDERS = "SELECT * FROM orders";
+    public static final String FETCH_PRODUCTS_BY_ORDER = "SELECT * FROM products p JOIN order_products op ON p.id = op.productId WHERE op.orderId = ?";
+    public static final String FETCH_ORDERS_BY_USER = "SELECT * FROM orders WHERE userId = ?";
+    public static final String DELETE_ORDER_BY_ID = "DELETE FROM orders WHERE id = ?;";
+
 }

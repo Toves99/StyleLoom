@@ -57,7 +57,7 @@ public class ProductServlet extends HttpServlet {
                 resp.setStatus(HttpServletResponse.SC_OK);
                 JSONObject responseJson = new JSONObject();
                 responseJson.put("message",Response.ADD_PRODUCT_SUCCESS_MESSAGE);
-                responseJson.put("statuscode",Response.successCode);
+                responseJson.put("statusCode",Response.successCode);
                 responseJson.put("productId", product.getId());
                 resp.getWriter().write(responseJson.toString());
             }
