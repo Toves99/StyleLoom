@@ -22,5 +22,16 @@ public class Queries {
     public static final String SELECT_MEDIA_BY_ID = "SELECT * FROM media WHERE id = ?";
     public static final String DELETE_MEDIA_BY_ID = "DELETE FROM photos WHERE id = ?";
     public static final String SELECT_ALL_MEDIA = "SELECT * FROM photos";
+    public static final String INSERT_FOLLOWS = "INSERT INTO followers (followerId, followedId) VALUES (?, ?)";
+    public static final String UNFOLLOW = "DELETE FROM followers WHERE followerId = ? AND followedId = ?";
+    public static final String SELECT_FOLLOWERS = "SELECT follower_id, followed_id FROM followers WHERE followedId = ?";
+    public static final String SELECT_FOLLOWING = "SELECT follower_id, followed_id FROM followers WHERE followerId = ?";
+    public static final String SELECT_ISFOLLOWING = "SELECT * FROM followers WHERE followerId = ? AND followedId = ?";
+    public static final String INSERT_PRODUCT = "INSERT INTO product (name,price,description,userId) VALUES (?, ?, ?,?)";
+    public static final String SELECT_PRODUCT_BY_ID = "SELECT * FROM product WHERE id = ?";
+    public static final String DELETE_PRODUCT_BY_ID = "DELETE FROM product WHERE id = ?";
+    public static final String SELECT_ALL_PRODUCT = "SELECT * FROM products";
+    public static final String UPDATE_PRODUCT = "UPDATE product SET name = ?, price = ?, description = ?";
+    
     
 }

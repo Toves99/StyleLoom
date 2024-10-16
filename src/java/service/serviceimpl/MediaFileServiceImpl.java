@@ -11,10 +11,7 @@ import java.sql.Connection;
 import Utils.DatabaseConnect;
 import Utils.Queries;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Base64;
@@ -51,11 +48,11 @@ public class MediaFileServiceImpl implements MediaFileService {
                         if (generatedKeys.next()) {
                             mediaFile.setId(generatedKeys.getLong(1)); // Set the generated ID to the mediaFile object
                         } else {
-                            throw new SQLException("Creating photo failed, no ID obtained.");
+                            throw new SQLException("Creating media failed, no ID obtained.");
                         }
                     }
                 } else {
-                    throw new SQLException("Creating photo failed, no rows affected.");
+                    throw new SQLException("Creating media failed, no rows affected.");
                 }
             }
         } catch (Exception e) {

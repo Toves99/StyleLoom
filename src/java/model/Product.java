@@ -9,19 +9,29 @@ package model;
  * @author cekesa
  */
 public class Product {
+
     private Long id;
     private String name;
     private double price;
     private String description;
+    private Long userId;
 
     public Product() {
     }
 
-    public Product(Long id, String name, double price, String description) {
+    public Product(Long id, String name, double price, String description, Long userId) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.description = description;
+        this.userId = userId;
+    }
+     public Product(Long id, String name, double price, String description) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        
     }
 
     public Long getId() {
@@ -56,10 +66,17 @@ public class Product {
         this.description = description;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
-        return "Product{" + "id=" + id + ", name=" + name + ", price=" + price + ", description=" + description + '}';
+        return "Product{" + "id=" + id + ", name=" + name + ", price=" + price + ", description=" + description + ", userId=" + userId + '}';
     }
-    
-    
+
 }
